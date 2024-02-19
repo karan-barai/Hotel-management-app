@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Booking_details {
+  Booking_details_id String   @id
+  Booking_id         String
+  Room_id            String?
+  adults             Int?
+  Children           Int?
+  Extra_person       Int?
+  Bookings           Bookings @relation(fields: [Booking_id], references: [Booking_id], onDelete: NoAction, onUpdate: NoAction, map: "Booking_id")
+  Rooms              Rooms?   @relation(fields: [Room_id], references: [Room_id], onDelete: NoAction, onUpdate: NoAction, map: "Room_id")
+}
+
+model Bookings {
+  Booking_id       String            @id
+  Booking_date     DateTime          @db.Date
+  Guest_id         String
+  Check_in         DateTime          @db.Date
+  check_out        DateTime          @db.Date
+  Room_type        String
+  Booking_status   String?
+  Rooms_booked     Int
+  Adults           Int?
+  Children         Int?
+  Extra_person     Int?
+  Total_amount     Decimal           @db.Money
+  Advance_received Decimal?          @db.Money
+  Date_of_advance  DateTime?         @db.Date
+  Balance_due      Decimal?          @db.Money
+  Due_date         DateTime?         @db.Date
+  Payment_status   String?
+  Sources          String?
+  Special_request  String?
+  Booking_details  Booking_details[]
+  guests           guests            @relation(fields: [Guest_id], references: [Guest_id], onDelete: NoAction, onUpdate: NoAction, map: "Guestid")
+  Room_types       Room_types        @relation(fields: [Room_type], references: [Room_type], onDelete: NoAction, onUpdate: NoAction, map: "Room_type")
+}
+
+model Floors {
+  Floor_id   String  @id
+  Hotel_id   String
+  Floor      Int
+  Floor_plan Bytes?  @map("Floor plan")
+  Hotels     Hotels  @relation(fields: [Hotel_id], references: [Hotel_id], onDelete: NoAction, onUpdate: NoAction, map: "Hotel_id")
+  Rooms      Rooms[]
+}
+
+model Hotels {
+  Hotel_id String   @id
+  Hotel    String
+  Address  String
+  image    Bytes[]
+  Floors   Floors[]
+}
+
+model Room_types {
+  Room_type   String     @id
+  Colour      String?
+  Description String?
+  Bookings    Bookings[]
+  Rooms       Rooms[]
+}
+
+model Rooms {
+  Room_id         String            @id
+  Floor_id        String
+  Room            Int
+  Room_type       String
+  Maximum_guests  Int
+  Booking_details Booking_details[]
+  Floors          Floors            @relation(fields: [Floor_id], references: [Floor_id], onDelete: NoAction, onUpdate: NoAction, map: "Floor_id")
+  Room_types      Room_types        @relation(fields: [Room_type], references: [Room_type], onDelete: NoAction, onUpdate: NoAction, map: "typeid")
+}
+
+model guests {
+  Guest_id                 String     @id
+  First_name               String
+  Last_name                String
+  Email                    String?
+  Phone                    String
+  Address                  String
+  Type_of_id               String?
+  Id_details               String
+  City                     String
+  state                    String
+  country                  String
+  Emergency_contact_person String?
+  Emergency_contact        String?
+  GSTIN                    String?
+  GST_name                 String?
+  Bookings                 Bookings[]
+}
