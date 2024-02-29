@@ -26,15 +26,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    
     <html lang="en" suppressHydrationWarning>
-    <ThemeProvider
+    
+      
+      <body className={cn(inter.className,{'debug-screens':process.  env.NODE_ENV === 'development'})}>
+        <ClerkProvider>
+        <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange>
-      
-      <body className={cn(inter.className,{'debug-screens':process.  env.NODE_ENV === 'development'})}>
         <Toaster/>
         <main className='flex flex-col min-h-screen 
         bg-secondary'>
@@ -45,9 +47,10 @@ export default function RootLayout({
           </Conatainer>
         </section>
         </main>
-        </body>
         </ThemeProvider>
+         </ClerkProvider>
+        </body>
+        
     </html>
-    </ClerkProvider>
   );
 }

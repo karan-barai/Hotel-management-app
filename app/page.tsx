@@ -11,12 +11,6 @@ import RoomOccupancy from "./Dashboard/RoomOccupancy";
 
 export default async function Home() {
 
-  
-  
-
-
-
-
   return (
     <main>
     <div className="flex flex-col gap-5 w-full">
