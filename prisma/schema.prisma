@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
@@ -57,7 +57,7 @@ model Hotels {
   Hotel_id String   @id
   Hotel    String
   Address  String
-  image    Bytes[]
+  image    String?
   Floors   Floors[]
 }
 

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { BookUser, ChevronsUpDownIcon, NotebookTabs, Plus } from "lucide-react"
+import { BookUser, ChevronsUpDownIcon, Menu, NotebookTabs, Plus } from "lucide-react"
 
 
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,7 @@ const Router =  useRouter();
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
-          <ChevronsUpDownIcon/>
+          <Menu/>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

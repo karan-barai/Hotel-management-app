@@ -4,6 +4,7 @@ import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
+  TableState,
   VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -46,13 +47,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { TableState } from "@tanstack/react-table";
+
 import { useState } from "react"
-import { ListFilter } from "lucide-react"
+import { ListFilter, PlusIcon, } from "lucide-react"
+import { useRouter } from "next/navigation"
+
 
 interface DataTablePaginationProps<TData> {
-  table:TableState<TData>;
+  table:  any;
 }
+
+
 
 export function DataTablePagination<TData>({
   table,
@@ -161,15 +166,17 @@ export function DataTable<TData, TValue>({
     
   })
 
+  const Router = useRouter();
+
   return (
     <>
-    <section>
-  <div className="flex flex-col md:flex-row items-center justify-between ">
+    
   {/* {table} */}
-
+  <div className="flex  item-center justify-between ">
   {/* {Name filter} */}
- <div className="flex items-center py-4 px-2">
-        <Input
+  <div className="flex items-center py-4">
+   
+  <Input
           placeholder="Filter Names..."
           value={(table.getColumn("Name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
@@ -178,9 +185,12 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
   </div>
+        
  
    {/* {Visibility dropsown} */}   
-   <div className="flex items-center py-4 px-2">
+   <div className="flex items-center py-4 gap-2">
+   
+    
     <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto cursor-pointer flex gap-2 items-center">
@@ -212,8 +222,11 @@ export function DataTable<TData, TValue>({
         </DropdownMenu>
         </div>
         </div>
+    
+    <section>
+  
       <div className="rounded-md border overflow-x-auto">
-        <Table className="w-full table-xs " >
+        <Table className="w-full table-xs text-center" >
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -262,6 +275,12 @@ export function DataTable<TData, TValue>({
      {/* {Pagination} */}
     <DataTablePagination table={table} />
     </section>
+
+    <div>
+      <Button onClick={() => Router.push('/guests/addnew')}
+        variant="outline" className="fixed bottom-4 right-4 ml-auto cursor-pointer flex gap-2 items-center"
+      ><PlusIcon/></Button>
+    </div>
     </>
   )
 }

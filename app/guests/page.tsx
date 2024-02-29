@@ -2,7 +2,7 @@ import React from 'react'
 import prisma from '@/prisma/db';
 import { DataTable } from '@/components/ui/data-table';
 import { Guest, columns } from "./columns"
-import { format } from 'date-fns';
+
 export const dynamic = 'force-dynamic'
 
 async function Guest_details(): Promise<Guest[]>{
@@ -24,13 +24,11 @@ const data = await prisma.guests.findMany({
   }
 });
 
-return data;
+return data as Guest[];
 }
 export default async function page() {
 
   const data = await Guest_details()
-
-  
 
   return (
     <div className='container py-10 mx-auto'>
@@ -38,15 +36,14 @@ export default async function page() {
         columns={columns}
         data={data.map((guest) => ({
           ...guest,
-          
-          Name:guest.First_name +' '+guest.Last_name,
-          Room_type: guest.Bookings[0]?.Room_type || '',
-          Special_request: guest.Bookings[0]?.Special_request || '',
-          // Format the date using toLocaleDateString() method
-          Check_in: guest.Bookings[0]?.Check_in ? format(new Date(guest.Bookings[0].Check_in), 'dd/MM/yyyy') : '',
+          Name: guest.First_name + ' ' + guest.Last_name,
+          Room_type: guest?.Bookings[0]?.Room_type,
+          Special_request: guest?.Bookings[0]?.Special_request,
+          Check_in: guest?.Bookings[0]?.Check_in ? new Date(guest.Bookings[0].Check_in).toLocaleDateString() : '',
         }))}
-      />
-    </div>
+      /> 
+      
+      </div>
   )
 }
 

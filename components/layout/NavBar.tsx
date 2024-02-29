@@ -13,8 +13,7 @@ const NavBar = () => {
     const Router = useRouter();
     const { userId } = useAuth();
 
-    return ( <div className="sticky top-0 border 
-    border-b-primary/10 bg-secondary">
+    return ( <div className="sticky top-0 border border-b-primary/10 bg-secondary">
          <Conatainer>
          <div className="flex items-center justify-between">
          <div className="flex items-center gap-1 cursor-pointer " onClick={() => Router.push('/') }>
@@ -23,7 +22,7 @@ const NavBar = () => {
         </div>
         <SearchInput/>
                <div className="flex items-center gap-3 ">
-             <div>
+             <div className="flex items-center gap-3 ">
                 <ModeToggle/>
                 <NavMenu/>
              </div>
@@ -32,7 +31,8 @@ const NavBar = () => {
             <Button variant="outline" size="sm" onClick={() => Router.push('/sign-in') } >Sign in</Button>
             <Button size="sm" onClick={() => Router.push('/sign-up') } >Sign up</Button>
             </>}
-            </div></div>   
+            </div>
+            </div>   
           </Conatainer>
     </div> );
 }
