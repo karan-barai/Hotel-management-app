@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-
+import prisma from '@/prisma/db';
 export async function POST(req:Request) {
     try {
 const body = await req.json();
 let { Guest_id,Booking_id } =  body
 
-const guest = await prisma?.guests.findMany({
+const guest = await prisma.guests.findMany({
   where: {
     Guest_id:Guest_id
   },
@@ -23,7 +23,7 @@ const guest = await prisma?.guests.findMany({
   }
 })
 
-const room = await prisma?.booking_details.findMany({
+const room = await prisma.booking_details.findMany({
     where: {
         Booking_id:Booking_id
     },

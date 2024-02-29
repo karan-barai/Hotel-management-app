@@ -1,12 +1,12 @@
 import AddBooking from '@/components/bookings/addBooking';
 import AddBookingDetails from '@/components/bookings/addBookingDetails';
 import React from 'react'
-
+import prisma from '@/prisma/db';
 export default async function page() {
   
     
       // Find the booking with the highest booking_id
-      const latestBooking = await prisma?.bookings.findFirst({
+      const latestBooking = await prisma.bookings.findFirst({
         orderBy: { Booking_id: 'desc' },
         select: { Booking_id: true },
       });

@@ -1,9 +1,9 @@
 
 import Addguest from '@/components/guests/addGuest'
 import React from 'react'
-
+import prisma from '@/prisma/db';
 export default async function Newguest() {
-  const latestGuest = await prisma?.guests.findFirst({
+  const latestGuest = await prisma.guests.findFirst({
     orderBy: { Guest_id: "desc" }, // Assuming Guest_id is sortable
   });
   let latestGuestId = "GI0001"; // Default value if no guests exist

@@ -1,7 +1,7 @@
 import React from 'react'
-
+import prisma from '@/prisma/db';
 export default async function UpcomingBookings() {
-    const latestBookings = await prisma?.bookings.findMany({
+    const latestBookings = await prisma.bookings.findMany({
         select:{
           Check_in: true,
           check_out: true,

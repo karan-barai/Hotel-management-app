@@ -1,6 +1,6 @@
 import React from 'react'
 import { columns } from './columns';
-
+import prisma from '@/prisma/db';
 import { BookingDataTable } from '@/components/ui/booking-data-table';
 
 // async function BookingDetails(): Promise<unknown> {
@@ -21,7 +21,7 @@ import { BookingDataTable } from '@/components/ui/booking-data-table';
 
 export default async function page() {  
     
-    const data = await prisma?.bookings.findMany({
+    const data = await prisma.bookings.findMany({
         
         include: {
             guests: {

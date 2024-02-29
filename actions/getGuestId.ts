@@ -1,7 +1,8 @@
 'use server'
+import prisma from '@/prisma/db';
 export const getGuestByName = async (guestName:string) => {
     try {
-        const guestId = await prisma?.guests.findMany({
+        const guestId = await prisma.guests.findMany({
             where:{
                 First_name:guestName
             },

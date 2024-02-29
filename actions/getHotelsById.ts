@@ -1,6 +1,7 @@
+import prisma from '@/prisma/db';
  export const gethotelsbyId = async (hotelId:string) => {
     try {
-        const hotel = await prisma?.hotels.findUnique({
+        const hotel = await prisma.hotels.findUnique({
             where:{
                 Hotel_id:hotelId
             },

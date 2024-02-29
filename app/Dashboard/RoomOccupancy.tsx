@@ -1,10 +1,10 @@
 import { CardContent } from '@/components/ui/Card';
 import ChartResponsive from '@/components/ui/ChartResponsive'
 import React from 'react'
-
+import prisma from '@/prisma/db';
 export default async function RoomOccupancy() {
   
-        const bookings = await prisma?.bookings.findMany({
+        const bookings = await prisma.bookings.findMany({
             select: {
                 Check_in: true,
                 check_out: true,

@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-
+import prisma from '@/prisma/db';
 export async function PATCH(req:Request, 
     {params}:{params: {hotelId:string}}
     ) {
@@ -15,7 +15,7 @@ export async function PATCH(req:Request,
 
 if(!userId) return new NextResponse('Unauthorized',{status: 401});
 
-        const Hotel = await prisma?.hotels.update({
+        const Hotel = await prisma.hotels.update({
             where : {
                 Hotel_id: params.hotelId,
             },
@@ -44,7 +44,7 @@ export async function DELETE(req:Request,
 
 if(!userId) return new NextResponse('Unauthorized',{status: 401});
 
-        const Hotel = await prisma?.hotels.delete({
+        const Hotel = await prisma.hotels.delete({
             where : {
                 Hotel_id: params.hotelId,
             }

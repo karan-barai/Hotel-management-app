@@ -1,11 +1,11 @@
 
 import { NextResponse } from "next/server";
-
+import prisma from '@/prisma/db';
 export async function POST(req:Request) {
     try {
 const body = await req.json();
 
-const guest = await prisma?.guests.create({
+const guest = await prisma.guests.create({
     data:{
         ...body,
     },

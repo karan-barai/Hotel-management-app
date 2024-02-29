@@ -1,11 +1,11 @@
 import BarChart from '@/components/bookings/Barchart'
 import { CardContent } from '@/components/ui/Card'
 import React from 'react'
-
+import prisma from '@/prisma/db';
 export default async function RoomsTypeBarchart() {
 
-    const roomTypes = await prisma?.room_types.findMany();
-    const bookingData = await prisma?.bookings.findMany({
+    const roomTypes = await prisma.room_types.findMany();
+    const bookingData = await prisma.bookings.findMany({
       select:{
         Booking_date:true,
         Rooms_booked:true,

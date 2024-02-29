@@ -25,8 +25,8 @@ export default async function TotalRevenue() {
       Total_amount: true
     },
   })
-  const totalBookings = await prisma?.bookings.count();
-  const totalGuests = await prisma?.guests.count();
+  const totalBookings = await prisma.bookings.count();
+  const totalGuests = await prisma.guests.count();
   const updatedCardData = cardData.map(card => {
     if (card.label === "Total Revenue" && totalRevenue && totalRevenue._sum && totalRevenue._sum.Total_amount) {
       return {

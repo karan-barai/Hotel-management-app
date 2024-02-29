@@ -4,14 +4,14 @@
 
 import { NextApiRequest, NextApiResponse } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
-
+import prisma from '@/prisma/db';
 export async function  POST(req: NextRequest) {
     const body = await req.json()
     const { Check_in, Check_out } = body;
     // console.log({hello:"hrllo"})
     console.log({Check_in,Check_out})
     try {
-        const allBookingIds = await prisma?.bookings.findMany({
+        const allBookingIds = await prisma.bookings.findMany({
           where: {
             AND: [
               { Check_in: { lte: Check_out } }, // Check-in is less than or equal to check-out
@@ -25,7 +25,7 @@ export async function  POST(req: NextRequest) {
       
         allBookingIds?.forEach(bid=> ids.push(bid.Booking_id))
       
-        const availableRooms = await prisma?.booking_details.findMany({
+        const availableRooms = await prisma.booking_details.findMany({
           where:{
             NOT:{
       

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import prisma from '@/prisma/db';
 function convInt(value: any){
     var valueString = value;
 var valueInteger = parseInt(valueString, 10); // The second argument specifies the base (radix), which is 10 for base 10 numbers
@@ -79,7 +80,7 @@ console.log({Date_of_advance})
 Due_date= getNextDateOrSame(Due_date),
 console.log({Due_date})
 
-const guest = await prisma?.bookings.create({
+const guest = await prisma.bookings.create({
     data:{
         ...body,
         Booking_date: Booking_date,
