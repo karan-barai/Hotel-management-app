@@ -31,7 +31,7 @@ export default function RootLayout({
     
       
       <body className={cn(inter.className,{'debug-screens':process.  env.NODE_ENV === 'development'})}>
-        <ClerkProvider>
+       
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -40,15 +40,17 @@ export default function RootLayout({
         <Toaster/>
         <main className='flex flex-col min-h-screen 
         bg-secondary'>
+           <ClerkProvider>
         <NavBar/>
         <section className='flex-grow'>
           <Conatainer>
              {children} 
           </Conatainer>
         </section>
+        </ClerkProvider>
         </main>
         </ThemeProvider>
-         </ClerkProvider>
+        
         </body>
         
     </html>
