@@ -20,7 +20,7 @@ const NavBar = () => {
                 <Image src='/logo.svg' alt="hotel-logo" width='45' height="45"/>
                 <div className="font-bold-text-xl">Hotel Management</div>
         </div>
-        <SearchInput/>
+        
                <div className="flex items-center gap-3 ">
              <div className="flex items-center gap-3 ">
                 <ModeToggle/>

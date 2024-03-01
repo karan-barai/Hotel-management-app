@@ -42,7 +42,7 @@ export default function ChartResponsive({data}: Props){
             <Tooltip labelClassName='text-black' />
             <Legend />
             <Bar dataKey="Occupancy" fill="#413ea0" />
-            <Line dataKey="TotalRevenue" stroke="#ff7300" />
+            <Line dataKey="Revenue" stroke="#ff7300" />
 
           </ComposedChart>
         </ResponsiveContainer>
