@@ -76,5 +76,5 @@ export default withUt({
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("tailwindcss-animate"),require('tailwindcss-debug-screens'),],
+  plugins: [require("tailwindcss-animate"), require("tailwindcss-animate"),require('tailwindcss-debug-screens'),require("daisyui"),],
 });

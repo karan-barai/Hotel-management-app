@@ -26,8 +26,11 @@ function getNextDateOrSame(dateString: any) {
     
     // Get the current date
     var currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); // Set current date time to midnight for accurate comparison
     
+    // Set time to midnight for both dates
+    givenDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
+
     // If the given date is equal to the current date, return the given date
     if (givenDate.getTime() === currentDate.getTime()) {
         return dateString;
@@ -37,6 +40,7 @@ function getNextDateOrSame(dateString: any) {
         return givenDate.toISOString();
     }
 }
+
 
 // Test with a given date
 
@@ -72,13 +76,13 @@ let {Booking_date, Adults, Children, Extra_person,Rooms_booked,Check_in,check_ou
  Booking_date = convDate(Booking_date)
  Booking_date = addOneDay(Booking_date);
 Check_in= getNextDateOrSame(Check_in),
-console.log({Check_in})
+
 check_out= getNextDateOrSame(check_out),
-console.log({check_out})
+
 Date_of_advance= getNextDateOrSame(Date_of_advance),
-console.log({Date_of_advance})
-Due_date= getNextDateOrSame(Due_date),
-console.log({Due_date})
+
+Due_date= getNextDateOrSame(Due_date)
+
 
 const guest = await prisma.bookings.create({
     data:{

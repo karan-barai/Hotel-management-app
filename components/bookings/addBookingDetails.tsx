@@ -11,7 +11,6 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
 import { SetStateAction, useEffect, useState } from "react";
-import { DatePickerWithPresets } from "./Datepicker";
 import { getGuestByName } from "@/actions/getGuestId";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { CalendarIcon } from "lucide-react";
@@ -65,7 +64,9 @@ const formSchema = z.object({
    const [availableRooms, setAvailableRooms] = useState<{ Room_id: string | null }[]>([]);
     const [latestBookingId, setLatestBookingId] = useState(""); 
     const [latestGuestId, setLatestGuestId] = useState("");// State to store the latest guest ID
-   
+    const [guestIds, setGuestIds] = useState([]);
+
+
   const Router = useRouter();
     const [formBody,setFormBody] = useState( {
         Booking_id:   lbi,                
@@ -95,6 +96,22 @@ const formSchema = z.object({
         setFormBody(prev=>({...prev,Guest_id:latestGuestId}))
     },[latestGuestId])
 
+    useEffect(() => {
+      async function getGuestId() {
+        setIsLoading(true);
+        try {
+          const response = await axios.get('/api/guest/guestIds');
+          setGuestIds(response.data);
+        } catch (error) {
+          console.error('Error fetching guest IDs:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+      
+      getGuestId();
+    }, []); // Call this effect only once, when component mounts
+    
     // Run this effect only once when the component mounts
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -117,7 +134,7 @@ const formSchema = z.object({
     
     toast({
       variant: 'success',
-      description: "🎉 Guest created"
+      description: "🎉 Booking created"
     })
     Router.push(`/bookings`) 
     
@@ -132,6 +149,9 @@ const formSchema = z.object({
     setIsLoading(false);
   });
 }
+
+
+    
 
 
 
@@ -195,26 +215,35 @@ const formSchema = z.object({
             )}/>
           </div>
         </div>
-          
+              
+        <FormField
+      control={form.control}
+      name="Guest_id"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Guest ID *</FormLabel>
+          <FormControl>
+                        <Select onValueChange={field.onChange}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Guest ID" />
+                          </SelectTrigger>
+                          <SelectContent>
+                          {isLoading ? (
+                           <SelectItem value="Select Guest ID" disabled>Loading...</SelectItem>
+                           ) : (
+                           guestIds.map((guest: { Guest_id: string , Name: string}) => (
+                            <SelectItem key={guest.Guest_id} value={guest.Guest_id}>{`${guest.Guest_id} - ${guest.Name}`}</SelectItem>
 
-        
-             
-             <FormField
-          control={form.control}
-          shouldUnregister={false} 
-          name="Guest_id"
-          render={({ field }) => (
-              <FormItem>
-                    <FormLabel>Guest ID *</FormLabel>
-                   
-                        <FormControl>
-                         <Input
-                         placeholder="Enter guest id here"  {...field} />
-                        </FormControl>
-                        
-                <FormMessage />
-              </FormItem>
-            )}/>
+                ))
+              )}
+            </SelectContent>
+                        </Select>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
               <FormField
@@ -247,9 +276,6 @@ const formSchema = z.object({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
                     initialFocus
                   />
                 </PopoverContent>
@@ -291,9 +317,6 @@ const formSchema = z.object({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
                     initialFocus
                   />
                 </PopoverContent>
@@ -508,9 +531,6 @@ const formSchema = z.object({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
                     initialFocus
                   />
                 </PopoverContent>
@@ -550,9 +570,6 @@ const formSchema = z.object({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
                     initialFocus
                   />
                 </PopoverContent>

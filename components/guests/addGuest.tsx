@@ -219,6 +219,32 @@ const formSchema = z.object({
             )}/>
         
         
+        <FormField
+          control={form.control}
+          name="Type_of_id"
+          render={({ field }) => (
+              <FormItem>
+                    <FormLabel>Type of ID *</FormLabel>
+                   
+                        <FormControl>
+                        <Select onValueChange={field.onChange}>
+                      <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Room Type " />
+                          </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                      <SelectItem value="Aadhar Card">Aadhar Card</SelectItem>
+                        <SelectItem value="Driving License">Driving License</SelectItem>
+                        <SelectItem value="Passport">Passport</SelectItem>
+                        <SelectItem value="Voter Id">Voter ID</SelectItem>
+                      </SelectContent>
+                      </Select>
+                        </FormControl>
+                        
+                <FormMessage />
+              </FormItem>
+            )}/>
            
         </div>
         <div className="space-y-4">
@@ -310,7 +336,7 @@ const formSchema = z.object({
             )}/>
 
       
-        <div className="px-24">
+        <div className="px-24 py-11">
         <Button
           type="submit"
           className="w-full mx-auto text-sm">

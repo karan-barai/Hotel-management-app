@@ -38,7 +38,7 @@ export default async function RoomOccupancy() {
         const dailyDataArray = Array.from(dailyDataMap.entries()).map(([date, data]) => ({
             date,
             Occupancy: data.occupancy,
-            TotalRevenue: data.totalAmount
+            Revenue: data.totalAmount
         }));
        
         

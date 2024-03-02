@@ -6,6 +6,7 @@ import RoomsTypeBarchart from "./Dashboard/RoomsTypeBarchart";
 import "@bitnoi.se/react-scheduler/dist/style.css";
 
 import RoomOccupancy from "./Dashboard/RoomOccupancy";
+import HeroImage from "@/components/ui/hero";
 
 
 
@@ -14,11 +15,7 @@ export default async function Home() {
   return (
     <main>
     <div className="flex flex-col gap-5 w-full">
-      <PageTitle title="Dashboard"/>
-      <TotalRevenue/>
-      <UpcomingBookings/>
-      <RoomOccupancy/>
-      <RoomsTypeBarchart/>
+     <HeroImage/>
    
     </div>
     </main>
