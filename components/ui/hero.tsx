@@ -6,7 +6,7 @@ export default function Hero() {
     <div className="hero-content text-center">
       <div className="max-w-md">
         <h1 className="text-3xl font-bold">Hotel Management APP</h1>
-        <p className="py-6">Click on SignIn/SinghtOut to use the app.</p>
+        <p className="py-6">Click on SignIn/SignUp to use the app.</p>
     
       </div>
     </div>
