@@ -142,7 +142,7 @@ const formSchema = z.object({
     console.error("Error creating guest:", error);
     toast({
       variant: 'destructive',
-      description: "Failed to create guest"
+      description: "Failed to create booking"
     });
   })
   .finally(() => {
