@@ -59,19 +59,19 @@ const formSchema = z.object({
 
   
 
-  const  AddBookingDetails = ({latestBookingId:lbi,latestGuestId:lgi}:{latestBookingId?:string,latestGuestId?:string}) => {
+  const  AddBookingDetails = ({latestBookingId:lbi, guestIds}:{latestBookingId?:string,guestIds: { Guest_id: string, Name: string }[] }) => {
    const [setStartDate,startDate] = useState<any>()
    const [availableRooms, setAvailableRooms] = useState<{ Room_id: string | null }[]>([]);
     const [latestBookingId, setLatestBookingId] = useState(""); 
-    const [latestGuestId, setLatestGuestId] = useState("");// State to store the latest guest ID
-    const [guestIds, setGuestIds] = useState([]);
+
+    
 
 
   const Router = useRouter();
     const [formBody,setFormBody] = useState( {
         Booking_id:   lbi,                
         Booking_date:    format(new Date(),"dd/MM/yyyy"),     
-        Guest_id:    lgi,     
+        Guest_id:    "",     
         Check_in:    format(new Date(), "yyyy-MM-dd") ,                 
         check_out    :   format(new Date(), "yyyy-MM-dd"),           
         Adults: "0",
@@ -92,25 +92,22 @@ const formSchema = z.object({
     },[latestBookingId])
     
 
-    useEffect(()=>{
-        setFormBody(prev=>({...prev,Guest_id:latestGuestId}))
-    },[latestGuestId])
-
-    useEffect(() => {
-      async function getGuestId() {
-        setIsLoading(true);
-        try {
-          const response = await axios.get('/api/guest/guestIds');
-          setGuestIds(response.data);
-        } catch (error) {
-          console.error('Error fetching guest IDs:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
+  
+    // useEffect(() => {
+    //   async function getGuestId() {
+    //     setIsLoading(true);
+    //     try {
+    //       const response = await axios.get('/api/guest/guestIds');
+    //       setGuestIds(response.data);
+    //     } catch (error) {
+    //       console.error('Error fetching guest IDs:', error);
+    //     } finally {
+    //       setIsLoading(false);
+    //     }
+    //   }
       
-      getGuestId();
-    }, []); // Call this effect only once, when component mounts
+    //   getGuestId();
+    // }, []); // Call this effect only once, when component mounts
     
     // Run this effect only once when the component mounts
 
@@ -152,18 +149,6 @@ const formSchema = z.object({
 
 
     
-
-
-
-// const [guestName, setGuestName] = useState(""); // State to store the guest name
-// const [guestId, setGuestId] = useState(""); // State to store the guest ID
-
-// Function to handle guest name input change
-// const handleGuestNameChange = (e: { target: { value: SetStateAction<string>; }; }) => {
-//     setGuestName(e.target.value);
-// };
-
-// Function to fetch guest ID based on the guest name
 
 
 
@@ -228,15 +213,10 @@ const formSchema = z.object({
                             <SelectValue placeholder="Select Guest ID" />
                           </SelectTrigger>
                           <SelectContent>
-                          {isLoading ? (
-                           <SelectItem value="Select Guest ID" disabled>Loading...</SelectItem>
-                           ) : (
-                           guestIds.map((guest: { Guest_id: string , Name: string}) => (
-                            <SelectItem key={guest.Guest_id} value={guest.Guest_id}>{`${guest.Guest_id} - ${guest.Name}`}</SelectItem>
-
-                ))
-              )}
-            </SelectContent>
+                            {guestIds.map((guest: { Guest_id: string, Name: string }) => (
+                          <SelectItem key={guest.Guest_id} value={guest.Guest_id}>{`${guest.Guest_id} - ${guest.Name}`}</SelectItem>
+                          ))}
+                        </SelectContent>
                         </Select>
           </FormControl>
           <FormMessage />

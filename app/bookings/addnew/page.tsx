@@ -21,25 +21,29 @@ export default async function page() {
       // Format the new ID with the prefix and leading zeros
       const formattedId = `HB${newId.toString().padStart(5, '0')}`;
       
-      // Create a new booking with the incremented ID (replace with your actual creation logic)
-      // await tx.booking.create({ data: { booking_id: formattedId } });
-     
-    
       
+            const guestIds = await prisma.guests.findMany({
+                select: {
+                    Guest_id: true,
+                    First_name: true,
+                    Last_name: true,
+                },
+                orderBy: {
+                    Guest_id: "desc"
+                }
+            });
+    
+            const formattedGuestIds = guestIds.map(guest => ({
+                Guest_id: guest.Guest_id,
+                Name: `${guest.First_name} ${guest.Last_name}`
+            }));
+          
         
-            // const guestId = await prisma?.guests.findMany({
-            //   where:{
-            //     First_name:guestName
-            //   },
-            //   select:{
-            //     Guest_id:true,
-            //   }
-            // })
-           
+    
 
             return (
               <div> 
-                <AddBookingDetails latestBookingId={formattedId}  /> 
+                <AddBookingDetails latestBookingId={formattedId} guestIds={formattedGuestIds} /> 
               </div>
             )
 }
