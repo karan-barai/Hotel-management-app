@@ -281,9 +281,11 @@ useEffect(() => {
                     selected={field.value}
                     onSelect={field.onChange}
                     initialFocus
-                    disabled={(date) =>
-                      date < new Date() 
-                    }
+                    disabled={(date) => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0); // Set time to the beginning of today
+                      return date < today;
+                    }}
                   />
                 </PopoverContent>
               </Popover>
@@ -547,6 +549,11 @@ useEffect(() => {
                     selected={field.value}
                     onSelect={field.onChange}
                     initialFocus
+                    disabled={(date) => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0); // Set time to the beginning of today
+                      return date < today;
+                    }}
                   />
                 </PopoverContent>
               </Popover>
@@ -586,6 +593,9 @@ useEffect(() => {
                     selected={field.value}
                     onSelect={field.onChange}
                     initialFocus
+                    disabled={(date) =>
+                      date <= new Date() 
+                    }
                   />
                 </PopoverContent>
               </Popover>
