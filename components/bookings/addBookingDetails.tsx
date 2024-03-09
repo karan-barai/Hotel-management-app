@@ -325,11 +325,28 @@ useEffect(() => {
                   <Calendar
                     mode="single"
                     selected={field.value}
-                    onSelect={field.onChange}
+                    onSelect={(date) => {
+                      // Ensure check-out date is always greater than check-in date
+                      if (date instanceof Date && form.getValues('Check_in')) {
+                        if (date <= form.getValues('Check_in')) {
+                          // If selected check-out date is before or equal to check-in date, set it to the day after check-in
+                          const nextDay = new Date(form.getValues('Check_in'));
+                          nextDay.setDate(nextDay.getDate() + 1);
+                          form.setValue('check_out', nextDay);
+                        } else {
+                          form.setValue('check_out', date);
+                        }
+                      }
+                    }}
                     initialFocus
-                    disabled={(date) =>
-                      date < new Date() 
-                    }
+                    disabled={(date) => {
+                      const checkInDate = form.getValues('Check_in');
+                      // Disable all dates before the check-in date
+                      if (checkInDate instanceof Date) {
+                        return date < checkInDate;
+                      }
+                      return false;
+                    }}
                   />
                 </PopoverContent>
               </Popover>
@@ -547,12 +564,31 @@ useEffect(() => {
                   <Calendar
                     mode="single"
                     selected={field.value}
-                    onSelect={field.onChange}
+                    onSelect={(date) => {
+                      // Ensure that the selected date is not greater than the check-in date or less than today's date
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0); // Set time to the beginning of today
+                      const checkInDate = form.getValues("Check_in");
+                      if (date instanceof Date && checkInDate instanceof Date) {
+                        if (date <= today) {
+                          // If selected date is before or equal to today's date, set it to today
+                          form.setValue("Date_of_advance", today);
+                        } else if (date >= checkInDate) {
+                          // If selected date is after or equal to check-in date, set it to the check-in date
+                          form.setValue("Date_of_advance", checkInDate);
+                        } else {
+                          // Otherwise, set it to the selected date
+                          form.setValue("Date_of_advance", date);
+                        }
+                      }
+                    }}
                     initialFocus
                     disabled={(date) => {
                       const today = new Date();
                       today.setHours(0, 0, 0, 0); // Set time to the beginning of today
-                      return date < today;
+                      const checkInDate = form.getValues("Check_in");
+                      // Disable dates greater than the check-in date or less than today's date
+                      return date > checkInDate || date < today;
                     }}
                   />
                 </PopoverContent>
@@ -591,11 +627,20 @@ useEffect(() => {
                   <Calendar
                     mode="single"
                     selected={field.value}
-                    onSelect={field.onChange}
+                    onSelect={(date) => {
+                      // Ensure that the selected date is always equal to or greater than the check-out date
+                      if (date instanceof Date) {
+                        const checkOutDate = form.getValues("check_out");
+                        if (checkOutDate instanceof Date && date >= checkOutDate) {
+                          form.setValue("Due_date", date);
+                        } else {
+                          // If selected date is before the check-out date, set it to the check-out date
+                          form.setValue("Due_date", checkOutDate);
+                        }
+                      }
+                    }}
                     initialFocus
-                    disabled={(date) =>
-                      date <= new Date() 
-                    }
+                    disabled={(date) => date <= new Date()}
                   />
                 </PopoverContent>
               </Popover>
