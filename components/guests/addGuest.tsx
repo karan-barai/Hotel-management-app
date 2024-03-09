@@ -230,7 +230,7 @@ const formSchema = z.object({
                         <Select onValueChange={field.onChange}>
                       <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select Room Type " />
+                            <SelectValue placeholder="Type of Id" />
                           </SelectTrigger>
                       </FormControl>
                       <SelectContent>
