@@ -7,7 +7,7 @@ import RoomsTypeBarchart from './RoomsTypeBarchart'
 
 export default function page() {
   return (
-    <div>
+    <div className="flex flex-col gap-5">
        <PageTitle title="Dashboard"/>
       <TotalRevenue/>
       <UpcomingBookings/>

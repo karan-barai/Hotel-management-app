@@ -57,15 +57,35 @@ const formSchema = z.object({
     guest_name:z.string(),           
   });
 
+  // const calculateTotalAmount = (roomType: string): string => {
+  //   switch (roomType) {
+  //     case "Deluxe":
+  //       return "9K";
+  //     case "Family":
+  //       return "10K";
+  //     case "Suite":
+  //       return "12K";
+  //     default:
+  //       return "";
+  //   }
+  // };
   
 
   const  AddBookingDetails = ({latestBookingId:lbi, guestIds}:{latestBookingId?:string,guestIds: { Guest_id: string, Name: string }[] }) => {
    const [setStartDate,startDate] = useState<any>()
    const [availableRooms, setAvailableRooms] = useState<{ Room_id: string | null }[]>([]);
     const [latestBookingId, setLatestBookingId] = useState(""); 
-
-    
-
+  // State to store total amount and function to set it
+  const [totalAmount, setTotalAmount] = useState("");
+  //   const { handleSubmit, control, setValue } = useForm();
+  //  // State to store total amount
+  
+  //   // Watch for changes in Room Type field
+  // const onRoomTypeChange = (roomType: string) => {
+  //   const calculatedAmount = calculateTotalAmount(roomType);
+  //   setTotalAmount(calculatedAmount);
+  //   setValue("Total_amount", calculatedAmount); // Set value for Total Amount field
+  // };
 
   const Router = useRouter();
     const [formBody,setFormBody] = useState( {
@@ -73,13 +93,13 @@ const formSchema = z.object({
         Booking_date:    format(new Date(),"dd/MM/yyyy"),     
         Guest_id:    "",     
         Check_in:    format(new Date(), "yyyy-MM-dd") ,                 
-        check_out    :   format(new Date(), "yyyy-MM-dd"),           
+        check_out    : format(new Date(new Date().setDate(new Date().getDate() + 1)), "yyyy-MM-dd"), // Adding 1 day to the checkout date         
         Adults: "0",
         Children    : "0",     
         Extra_person  :"0",          
         Date_of_advance :   format(new Date(), "yyyy-MM-dd"),       
         Balance_due     :  "0",           
-        Due_date        :   format(new Date(), "yyyy-MM-dd"),        
+        Due_date        :   format(new Date(new Date().setDate(new Date().getDate() + 1)), "yyyy-MM-dd"),        
         Special_request :  "",
       
     })
@@ -122,8 +142,22 @@ const formSchema = z.object({
             Due_date: new Date(formBody.Due_date) // Convert Due_date to a Date object
         },
     }); 
+    useEffect(() => {
+      form.setValue("Due_date", form.getValues("check_out")); // Set Due_date value to checkout date
+  }, [form.getValues("check_out")]);
     const [isLoading, setIsLoading] = useState(false);
     const {toast} = useToast();
+
+
+    useEffect(() => {
+      const totalAmount = parseFloat(form.getValues("Total_amount") || "0");
+      const advanceReceived = parseFloat(form.getValues("Advance_received") || "0");
+      const balanceDue = (totalAmount - advanceReceived).toString(); // Convert balanceDue to a string
+      form.setValue("Balance_due", balanceDue);
+    }, [form.getValues("Total_amount"), form.getValues("Advance_received")]);
+  
+  
+    
   async function onSubmitForm(values: z.infer<typeof formSchema>) {
     
     setIsLoading(true);
@@ -257,6 +291,9 @@ const formSchema = z.object({
                     selected={field.value}
                     onSelect={field.onChange}
                     initialFocus
+                    disabled={(date) =>
+                      date < new Date() 
+                    }
                   />
                 </PopoverContent>
               </Popover>
@@ -298,6 +335,9 @@ const formSchema = z.object({
                     selected={field.value}
                     onSelect={field.onChange}
                     initialFocus
+                    disabled={(date) =>
+                      date < new Date() 
+                    }
                   />
                 </PopoverContent>
               </Popover>
