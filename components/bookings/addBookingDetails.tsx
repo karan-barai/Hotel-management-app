@@ -18,6 +18,7 @@ import { Calendar } from "../ui/calendar";
 import { cn } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { Textarea } from "../ui/textarea";
+import { Value } from "@prisma/client/runtime/library";
 
 
 
@@ -57,37 +58,17 @@ const formSchema = z.object({
     guest_name:z.string(),           
   });
 
-  // const calculateTotalAmount = (roomType: string): string => {
-  //   switch (roomType) {
-  //     case "Deluxe":
-  //       return "9K";
-  //     case "Family":
-  //       return "10K";
-  //     case "Suite":
-  //       return "12K";
-  //     default:
-  //       return "";
-  //   }
-  // };
-  
+
 
   const  AddBookingDetails = ({latestBookingId:lbi, guestIds}:{latestBookingId?:string,guestIds: { Guest_id: string, Name: string }[] }) => {
    const [setStartDate,startDate] = useState<any>()
    const [availableRooms, setAvailableRooms] = useState<{ Room_id: string | null }[]>([]);
     const [latestBookingId, setLatestBookingId] = useState(""); 
-  // State to store total amount and function to set it
-  const [totalAmount, setTotalAmount] = useState("");
-  //   const { handleSubmit, control, setValue } = useForm();
-  //  // State to store total amount
-  
-  //   // Watch for changes in Room Type field
-  // const onRoomTypeChange = (roomType: string) => {
-  //   const calculatedAmount = calculateTotalAmount(roomType);
-  //   setTotalAmount(calculatedAmount);
-  //   setValue("Total_amount", calculatedAmount); // Set value for Total Amount field
-  // };
+    const [totalAmount, setTotalAmount] = useState(0);
+    
+   
 
-  const Router = useRouter();
+    const Router = useRouter();
     const [formBody,setFormBody] = useState( {
         Booking_id:   lbi,                
         Booking_date:    format(new Date(),"dd/MM/yyyy"),     
@@ -101,7 +82,9 @@ const formSchema = z.object({
         Balance_due     :  "0",           
         Due_date        :   format(new Date(new Date().setDate(new Date().getDate() + 1)), "yyyy-MM-dd"),        
         Special_request :  "",
-      
+        Room_type: "" as "Family" | "Deluxe" | "Suite", // Ensure Room_type matches the expected type
+        Booking_status: "" as "Pending" | "Confirmed",
+        Rooms_booked:"1",
     })
   
     useEffect(()=>{
@@ -112,24 +95,7 @@ const formSchema = z.object({
     },[latestBookingId])
     
 
-  
-    // useEffect(() => {
-    //   async function getGuestId() {
-    //     setIsLoading(true);
-    //     try {
-    //       const response = await axios.get('/api/guest/guestIds');
-    //       setGuestIds(response.data);
-    //     } catch (error) {
-    //       console.error('Error fetching guest IDs:', error);
-    //     } finally {
-    //       setIsLoading(false);
-    //     }
-    //   }
-      
-    //   getGuestId();
-    // }, []); // Call this effect only once, when component mounts
-    
-    // Run this effect only once when the component mounts
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -156,8 +122,35 @@ const formSchema = z.object({
       form.setValue("Balance_due", balanceDue);
     }, [form.getValues("Total_amount"), form.getValues("Advance_received")]);
   
-  
-    
+   
+   // Function to calculate the total amount based on room type and number of rooms
+useEffect(() => {
+  // Calculate total amount here based on Room_type and Rooms_booked
+  const roomType = form.getValues("Room_type");
+  const roomsBooked = parseInt(form.getValues("Rooms_booked")) || 0;
+
+  let pricePerRoom = 0;
+  switch (roomType) {
+      case "Deluxe":
+          pricePerRoom = 9000;
+          break;
+      case "Family":
+          pricePerRoom = 10000;
+          break;
+      case "Suite":
+          pricePerRoom = 12000;
+          break;
+      default:
+          break;
+  }
+
+  const calculatedTotalAmount = pricePerRoom * roomsBooked;
+  setTotalAmount(calculatedTotalAmount);
+
+  // Update Total_amount field in form
+  form.setValue("Total_amount", calculatedTotalAmount.toString());
+}, [form.getValues("Room_type"), form.getValues("Rooms_booked")]);
+
   async function onSubmitForm(values: z.infer<typeof formSchema>) {
     
     setIsLoading(true);
@@ -180,9 +173,6 @@ const formSchema = z.object({
     setIsLoading(false);
   });
 }
-
-
-    
 
 
 
@@ -359,7 +349,11 @@ const formSchema = z.object({
                     <FormLabel>Room Type *</FormLabel>
                    
                         <FormControl>
-                        <Select onValueChange={field.onChange}>
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value); }}
+                        >
+
                       <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select Room Type " />
@@ -376,6 +370,7 @@ const formSchema = z.object({
                 <FormMessage />
               </FormItem>
             )}/>
+               
  <FormField
           control={form.control}
           name="Booking_status"
@@ -478,7 +473,7 @@ const formSchema = z.object({
                     <FormLabel>Total Amount *</FormLabel>
   
                         <FormControl>
-                           <Input placeholder="Enter total amount here " {...field} />
+                        <Input disabled placeholder="Enter total amount here"  {...field}  value={totalAmount.toString()}/>
                         </FormControl>
                         
                 <FormMessage />
@@ -510,7 +505,7 @@ const formSchema = z.object({
                     <FormLabel> Balance Due *</FormLabel>
                     
                         <FormControl>
-                           <Input placeholder="Enter due balance here " {...field} />
+                           <Input disabled placeholder="Enter due balance here " {...field} />
                         </FormControl>       
                 <FormMessage />
               </FormItem>
