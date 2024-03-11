@@ -4,10 +4,10 @@ import { useCallback, useMemo, useState } from "react";
 
  export default function BitScheduler({ schedulerData }: any) {
 
-  const [range, setRange] = useState<SchedulerProjectData>({
-    startDate: new Date(),
-    endDate: new Date(),
-  });
+  // const [range, setRange] = useState<SchedulerProjectData>({
+  //   startDate: new Date(),
+  //   endDate: new Date(),
+  // });
 
 
   const handleTiteCtick =(data: SchedulerProjectData) =>
@@ -15,16 +15,16 @@ import { useCallback, useMemo, useState } from "react";
     `${data.title} - ${data.subtitle}  \n  Check In:${data.startDate} \n Check out:${data.endDate} `
   );
 
-const handelRangeChange = useCallback((range: SchedulerProjectData) =>{
-  setRange(range);
-},[]);
+// const handelRangeChange = useCallback((range: SchedulerProjectData) =>{
+//   setRange(range);
+// },[]);
 
   return (
     <section>
       <Scheduler
         data={schedulerData}
         isLoading={false}
-        onRangeChange={handelRangeChange}
+        // onRangeChange={handelRangeChange}
         onTileClick={handleTiteCtick}
       
         config={{
