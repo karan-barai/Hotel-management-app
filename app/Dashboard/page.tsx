@@ -4,10 +4,11 @@ import TotalRevenue from './TotalRevenue'
 import UpcomingBookings from './UpcomingBookings'
 import RoomOccupancy from './RoomOccupancy'
 import RoomsTypeBarchart from './RoomsTypeBarchart'
+// import EventSceduler fro../Calendar/EventScedulerler'
 
 export default function page() {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="">
        <PageTitle title="Dashboard"/>
       <TotalRevenue/>
       <UpcomingBookings/>

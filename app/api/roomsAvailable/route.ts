@@ -9,7 +9,7 @@ export async function  POST(req: NextRequest) {
     const body = await req.json()
     const { Check_in, Check_out } = body;
     // console.log({hello:"hrllo"})
-    console.log({Check_in,Check_out})
+    // console.log({Check_in,Check_out})
     try {
         const allBookingIds = await prisma.bookings.findMany({
           where: {
@@ -20,7 +20,7 @@ export async function  POST(req: NextRequest) {
           },
           select: { Booking_id: true }, // Only select the booking ID
       });
-      console.log({allBookingIds})
+      // console.log({allBookingIds})
         const ids:string[] = [];
       
         allBookingIds?.forEach(bid=> ids.push(bid.Booking_id))

@@ -52,7 +52,7 @@ const formSchema = z.object({
     Due_date        : z.date({
       required_error: "A due date is required.",
     }),          
-    Payment_status  :  z.enum(["Paid","Partially Paid","To be paid"]),    
+    Payment_status: z.string(),
     Sources     :z.enum(["Travel Agent","Ads","Organic","Booking Engine"]),        
     Special_request : z.string(),   
     guest_name:z.string(),           
@@ -85,6 +85,7 @@ const formSchema = z.object({
         Room_type: "" as "Family" | "Deluxe" | "Suite", // Ensure Room_type matches the expected type
         Booking_status: "" as "Pending" | "Confirmed",
         Rooms_booked:"1",
+        Payment_status: "To be paid" as "Paid" | "Partially Paid" | "To be paid" // Initialize Payment_status with the expected type
     })
   
     useEffect(()=>{
@@ -150,6 +151,26 @@ useEffect(() => {
   // Update Total_amount field in form
   form.setValue("Total_amount", calculatedTotalAmount.toString());
 }, [form.getValues("Room_type"), form.getValues("Rooms_booked")]);
+
+// Update useEffect to calculate and set Payment status based on Total_amount and Advance_received
+useEffect(() => {
+  const totalAmount = parseFloat(form.getValues("Total_amount") || "0");
+  const advanceReceived = parseFloat(form.getValues("Advance_received") || "0");
+  const balanceDue = totalAmount - advanceReceived;
+
+  let paymentStatus: "Paid" | "Partially Paid" | "To be paid" = "To be paid";
+  if (balanceDue === 0) {
+      paymentStatus = "Paid";
+  } else if (balanceDue > 0 && advanceReceived > 0) {
+      paymentStatus = "Partially Paid";
+  }
+
+  // Set Payment status value in the form state
+  form.setValue("Payment_status", paymentStatus);
+
+}, [form.getValues("Total_amount"), form.getValues("Advance_received")]);
+
+
 
   async function onSubmitForm(values: z.infer<typeof formSchema>) {
     
@@ -267,7 +288,7 @@ useEffect(() => {
                       )}
                     > 
                       {field.value ? (
-                        format(field.value, "dd/MM/yyyy")
+                        format(field.value, "dd/MM/yy")
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -313,7 +334,7 @@ useEffect(() => {
                       )}
                     >
                       {field.value ? (
-                        format(field.value,  "dd/MM/yyyy")
+                        format(field.value,  "dd/MM/yy")
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -552,7 +573,7 @@ useEffect(() => {
                       )}
                     >
                       {field.value ? (
-                        format(field.value,  "dd/MM/yyyy")
+                        format(field.value,  "dd/MM/yy")
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -615,7 +636,7 @@ useEffect(() => {
                       )}
                     >
                       {field.value ? (
-                        format(field.value,  "dd/MM/yyyy")
+                        format(field.value,  "dd/MM/yy")
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -652,30 +673,19 @@ useEffect(() => {
         </div>
       
 
-          
-
- <FormField
-          control={form.control}
-          name="Payment_status"
-          render={({ field }) => (
-              <FormItem>
-                    <FormLabel> Payment status *</FormLabel>
-                   
-                    <Select onValueChange={field.onChange}>
-                      <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select payment status" />
-                          </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                      <SelectItem value="Paid">Paid</SelectItem>
-                        <SelectItem value="Partially Paid">Partially Paid</SelectItem>
-                        <SelectItem value="To be paid">To be paid</SelectItem>
-                      </SelectContent>
-                      </Select>  
-                <FormMessage />
-              </FormItem>
-            )}/>
+        <FormField
+    control={form.control}
+    name="Payment_status"
+    render={({ field }) => (
+        <FormItem>
+            <FormLabel> Payment status *</FormLabel>
+            <FormControl>
+                <Input disabled {...field} />
+            </FormControl>
+            <FormMessage />
+        </FormItem>
+    )}
+/>
        <FormField
           control={form.control}
           name="Sources"

@@ -1,5 +1,6 @@
 import React from 'react'
 import prisma from '@/prisma/db';
+import { format } from 'date-fns';
 export default async function UpcomingBookings() {
     const latestBookings = await prisma.bookings.findMany({
         select:{
@@ -56,9 +57,10 @@ export default async function UpcomingBookings() {
         {latestBookings?.map((booking, index) => (
           <tr key={index}>
             <td className="px-1 py-1 whitespace-nowrap">{booking.guests.First_name} {booking.guests.Last_name}</td>
-            <td className="px-1 py-1 whitespace-nowrap">{booking.Check_in.toLocaleDateString()}</td>
-            <td className="px-1 py-1 whitespace-nowrap">{booking.check_out.toLocaleDateString()}</td>
+            <td className="px-1 py-1 whitespace-nowrap">{format(new Date(booking.Check_in),"dd/MM/yy")}</td>
+            <td className="px-1 py-1 whitespace-nowrap">{format(new Date(booking.check_out),"dd/MM/yy")}</td>
           </tr>
+      
         ))}
       </tbody>
     </table>

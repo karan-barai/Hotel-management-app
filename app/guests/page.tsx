@@ -2,6 +2,7 @@ import React from 'react'
 import prisma from '@/prisma/db';
 import { DataTable } from '@/components/ui/data-table';
 import { Guest, columns } from "./columns"
+import { format } from 'date-fns';
 
 export const dynamic = 'force-dynamic'
 
@@ -39,7 +40,7 @@ export default async function page() {
           Name: guest.First_name + ' ' + guest.Last_name,
           Room_type: guest?.Bookings[0]?.Room_type,
           Special_request: guest?.Bookings[0]?.Special_request,
-          Check_in: guest?.Bookings[0]?.Check_in ? new Date(guest.Bookings[0].Check_in).toLocaleDateString() : '',
+          Check_in: guest?.Bookings[0]?.Check_in ? format( new Date(guest.Bookings[0].Check_in), "dd/MM/yy") : '',
         }))}
       /> 
       

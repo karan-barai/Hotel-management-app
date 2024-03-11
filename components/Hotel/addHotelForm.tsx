@@ -71,7 +71,7 @@ useEffect(() => {
 
 function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    console.log(values)
+    
     if(hotel){
       // axios.patch(`/api/hotel/${hotel.Hotel_id}`,values).then((res) =>{
       //   toast({
@@ -203,7 +203,7 @@ const handleImageDelete = (image:string) => {
                                 endpoint="imageUploader"
                                 onClientUploadComplete={(res) => {
                                   // Do something with the response
-                                  console.log("Files: ", res);
+                                  
                                   setImage(res[0].url);
                                   toast({
                                     variant: 'success',
