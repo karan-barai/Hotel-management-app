@@ -30,7 +30,7 @@ import { useCallback, useMemo, useState } from "react";
         config={{
           zoom: 1,
           filterButtonState: -1,
-          includeTakenHoursOnWeekendsInDayView: true,
+          includeTakenHoursOnWeekendsInDayView: false,
         }}
       />
     </section>
