@@ -167,7 +167,7 @@ export function DataTable<TData, TValue>({
   })
 
   const Router = useRouter();
-
+  // Function to handle navigation to /users/addNew
   return (
     <>
     
